@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    url: jdbc:db2://127.0.0.1:50000/mydb
+    separator: ;;
+    initialization-mode: always
+    hikari:
+      username: db2inst1
+      password: password
