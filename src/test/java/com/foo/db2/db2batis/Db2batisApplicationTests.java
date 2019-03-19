@@ -14,12 +14,13 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@Sql(scripts="/cleanup.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+//@Sql(scripts="/cleanup.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 public class Db2batisApplicationTests {
 
     @Autowired
@@ -38,18 +39,15 @@ public class Db2batisApplicationTests {
         System.out.println(res.toString());
 //        res.forEach(w->log.debug(w.toString()));
 
-        List<AddressLog> res1 = repository.findLastUpdateByName("sophie");
-        System.out.println(res1.toString());
 
     }
 
 
-
     @Test
     public void testStoredProcedure() {
-        List<AddressLog> res = repository.findAll();
-        System.out.println(res.toString());
-        res.forEach(w->log.debug(w.toString()));
+        List<AddressLog> res1 = new ArrayList<>();
+        repository.findLastUpdateByName("sophie", res1);
+        System.out.println(res1.toString());
 
     }
 

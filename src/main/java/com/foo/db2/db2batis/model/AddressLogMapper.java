@@ -8,6 +8,7 @@ import org.apache.ibatis.type.LocalDateTimeTypeHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
+import java.sql.ResultSet;
 import java.util.List;
 
 @Mapper
@@ -31,7 +32,10 @@ public interface AddressLogMapper {
 
 
     @Options(statementType = StatementType.CALLABLE)
-    @Select("{ CALL ff(#{name, mode=IN, javaType=java.lang.String, jdbcType=VARCHAR})}")
-    @ResultMap("AddressLogMapping")
-    List<AddressLog> findLastUpdateByName(@Param("name") String name);
+    @Select("{ CALL LAST_UPDATED_ENTRY_BY_NAME(" +
+            "#{name, mode=IN, javaType=java.lang.String, jdbcType=VARCHAR}" +
+            ", #{resultSet, mode=OUT, javaType=com.foo.db2.db2batis.model.AddressLog, jdbcType=CURSOR, resultMap=AddressLogMapping}" +
+            ")}")
+//    @ResultMap("AddressLogMapping")
+    void findLastUpdateByName(@Param("name") String name, @Param("resultSet")List<AddressLog> resultSet);
 }

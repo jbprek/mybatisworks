@@ -6,10 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.ResultSet;
 import java.util.List;
 
 @Repository
-public class AddressLogRepository implements AddressLogMapper{
+public class AddressLogRepository /*implements AddressLogMapper*/{
 
     private AddressLogMapper mapper;
 
@@ -17,22 +18,25 @@ public class AddressLogRepository implements AddressLogMapper{
     public AddressLogRepository(AddressLogMapper mapper) {
         this.mapper = mapper;
     }
-    @Override
+
     @Transactional(readOnly = true)
     public List<AddressLog> findByName(String name) {
         return mapper.findByName(name);
     }
 
-    @Override
     @Transactional(readOnly = true)
     public List<AddressLog> findAll() {
         return mapper.findAll();
     }
+//
+//    @Override
+//    @Transactional(readOnly = true)
+//    public List<AddressLog> findLastUpdateByName(String name) {
+//        ResultSet set;
+//        return mapper.findLastUpdateByName(name, set);
+//    }
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<AddressLog> findLastUpdateByName(String name) {
-        return mapper.findLastUpdateByName(name);
+    public void findLastUpdateByName(String name, List<AddressLog> resultSet) {
+        mapper.findLastUpdateByName(name, resultSet);
     }
-
 }

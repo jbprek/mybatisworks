@@ -1,11 +1,8 @@
--- create schema DB2INST1;;
-
--- create database test;;
 
 create table ADDR_LOG
 (
+  PERSON_NAME VARCHAR(50) not null,
 	TM TIMESTAMP(7) not null,
-	PERSON_NAME VARCHAR(50) not null,
 	LINE1 VARCHAR(40),
 	LINE2 VARCHAR(40),
 	ZIP VARCHAR(10),
@@ -14,23 +11,19 @@ create table ADDR_LOG
     primary key (PERSON_NAME, tm)
 );;
 
-CREATE PROCEDURE FF(IN in_person_name varchar(50))
-  LANGUAGE SQL
-BEGIN
-  DECLARE out_line1  varchar(40);
-  DECLARE out_line2  varchar(40);
-  DECLARE out_zip  varchar(10);
-  DECLARE out_country  varchar(3);
-  DECLARE not_found CONDITION FOR '02000';
 
-  DECLARE C1 CURSOR FOR
-    SELECT DISTINCT a.line1, a.line2,  a.zip, a.country
-    FROM addr_log a
-    WHERE a.person_name = in_person_name
-    AND a.tm = (SELECT  max(tm) FROM addr_log WHERE addr_log.person_name = in_person_name);
-  OPEN C1;
-  RETURN;
-END;;
+create procedure LAST_UPDATED_ENTRY_BY_NAME(in IN_PERSON_NAME varchar(50), OUT CUR cursor)
+  language sql
+  dynamic result sets 1
+
+begin
+  declare CUR cursor for
+    select distinct PERSON_NAME, TM, LINE1, LINE1, ZIP, COUNTRY
+    from ADDR_LOG
+    where PERSON_NAME = in_person_name
+    and TM = (select MAX(TM) from ADDR_LOG where PERSON_NAME = PERSON_NAME);
+  open CUR;
+  return;
+end;;
 
 
-call FF('sophie')
